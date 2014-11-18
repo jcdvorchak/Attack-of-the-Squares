@@ -1,0 +1,206 @@
+#:kivy 1.8.0
+
+<AttackCircle>:
+    canvas:
+    	Color:
+    		rgba: (0, 1, 0, 1)
+        Ellipse:
+            pos: self.pos
+            size: self.size 
+
+<AttackSquare>:
+    canvas:
+    	Color:
+    		rgba: (1, 0.3, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size 
+
+<AttackBullet>:
+	canvas:
+		Color:
+			rgba: (1, 1, 0, 1)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+<AttackGame>:
+	circle1: circle1
+	circle2: circle2
+	circle3: circle3
+	circle4: circle4
+
+	square1: square1
+	square2: square2
+	square3: square3
+	square4: square4
+
+	bullet1: bullet1
+	bullet2: bullet2
+	bullet3: bullet3
+	bullet4: bullet4
+
+	canvas:
+		Color:
+			rgba: (0, 0, 1, 1)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	Label:
+		font_size: root.height / 17
+		color: 1,1,0,1
+		bold: 1
+		halign: 'left'
+		text: "Score: #"
+		size: (root.width/4, self.font_size)
+		left: 0
+		y: root.height-self.font_size
+		
+	Label:
+		font_size: root.height / 17
+		color: 1,1,0,1
+		bold: 1
+		halign: 'right'
+		text: "Points: #"
+		size: (root.width/4, self.font_size)
+		right: root.width
+		y: root.height-self.font_size
+
+	Label:
+		font_size: root.height / 15
+		color: 1,1,0,1
+		bold: 1
+		halign: 'center'
+		text: 'TEXT'
+		size: (root.width/6, self.font_size)
+		center_x: root.width/2
+		y: root.height-self.font_size
+		
+	AttackCircle:
+		id: circle1
+		size: (root.height/6, root.height/6)
+		center_y: (root.height/6)
+		center_x: self.width
+
+	AttackCircle:
+		id: circle2
+		size: (root.height/6, root.height/6)
+		center_y: (root.height/6)*2.25
+		center_x: self.width
+
+	AttackCircle:
+		id: circle3
+		size: (root.height/6, root.height/6)
+		center_y: (root.height/6)*3.5
+		center_x: self.width
+
+	AttackCircle:
+		id: circle4
+		size: (root.height/6, root.height/6)
+		center_y: (root.height/6)*4.75
+		center_x: self.width
+
+	AttackSquare:
+		id: square1
+		size: (root.height/8, root.height/8)
+		center_y: (root.height/6)
+		center_x: root.width-self.width
+
+	AttackSquare:
+		id: square2
+		size: (root.height/8, root.height/8)
+		center_y: (root.height/6)*2.25
+		center_x: root.width-self.width
+
+	AttackSquare:
+		id: square3
+		size: (root.height/8, root.height/8)
+		center_y: (root.height/6)*3.5
+		center_x: root.width-self.width
+
+	AttackSquare:
+		id: square4
+		size: (root.height/8, root.height/8)
+		center_y: (root.height/6)*4.75
+		center_x: root.width-self.width
+
+	AttackBullet:
+		id: bullet1
+		size: (root.height/32, root.height/48)
+		center_y: (root.height/6)
+		center_x: root.height/6
+
+	AttackBullet:
+		id: bullet2
+		size: (root.height/32, root.height/48)
+		center_y: (root.height/6)*2.25
+		center_x: root.height/6
+
+	AttackBullet:
+		id: bullet3
+		size: (root.height/32, root.height/48)
+		center_y: (root.height/6)*3.5
+		center_x: root.height/6
+
+	AttackBullet:
+		id: bullet4
+		size: (root.height/32, root.height/48)
+		center_y: (root.height/6)*4.75
+		center_x: root.height/6
+
+
+<HomeScreen>:
+	canvas:
+		Color:
+			rgba: (1, 1, 0, 1)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	Label:
+		text: 'TITLE'
+		color: (1, 0, 0, 1)
+		bold: 1
+		font_size: root.height/10
+		size: (root.width, self.font_size)
+		text_size: self.size
+		center_x: root.width/2
+		center_y: root.height*(3/4)
+		halign: 'center'
+		
+	Label:
+		Button:
+			text: 'Go to game'
+			font_size: root.height/20
+			text_size: (root.width/4, self.font_size+10)
+			size: (root.width/4, self.font_size+10)
+			center_x: root.width/2
+			center_y: (root.height/4)
+			halign: 'center'
+			valign: 'middle'
+			on_press: 
+				root.manager.transition.direction='left'
+				root.manager.current = 'game'
+
+<GameScreen>:
+	AttackGame:
+
+	Label:
+		Button:
+			text: 'Home'
+			font_size: root.height/20
+			text_size: (root.width/6, self.font_size)
+			size: (root.width/6, self.font_size+10)
+			center_x: root.width/2
+			halign: 'center'
+			valign: 'middle'
+			on_press:
+				root.manager.transition.direction='right'
+				root.manager.current = 'home'
+
+<ShopScreen>:
+
+<EndScreen>:
+
+#;alsjl;jdlf
