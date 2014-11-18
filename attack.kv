@@ -52,9 +52,10 @@
 		color: 1,1,0,1
 		bold: 1
 		halign: 'left'
-		text: "Score: #"
-		size: (root.width/4, self.font_size)
-		left: 0
+		text: "Score: " + str(root.score)
+		size: (root.width/2, self.font_size)
+		text_size: self.size
+		x: 0
 		y: root.height-self.font_size
 		
 	Label:
@@ -62,8 +63,9 @@
 		color: 1,1,0,1
 		bold: 1
 		halign: 'right'
-		text: "Points: #"
-		size: (root.width/4, self.font_size)
+		text: "Points: " + str(root.points)
+		size: (root.width/2, self.font_size)
+		text_size: self.size
 		right: root.width
 		y: root.height-self.font_size
 
@@ -72,10 +74,19 @@
 		color: 1,1,0,1
 		bold: 1
 		halign: 'center'
-		text: 'TEXT'
+		text: '<TEXT>'
 		size: (root.width/6, self.font_size)
 		center_x: root.width/2
 		y: root.height-self.font_size
+
+	Label:
+		font_size: root.height/20
+		color: 1,1,0,1
+		halign: 'center'
+		text: '<<<<<<<<<<<<<<<instruction>>>>>>>>>>>>>>>'
+		size: (root.width, self.font_size)
+		center_x: root.width/2
+
 		
 	AttackCircle:
 		id: circle1

@@ -4,9 +4,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.clock import Clock
 from kivy.core.window import Window
-
-score = 0
-points = 0
+from kivy.properties import NumericProperty
 
 squareSpawn = Window.width+50
 squareSpeedMultiplier = 1
@@ -34,6 +32,9 @@ class AttackBullet(Widget):
 		self.center_x=circle.center_x
 
 class AttackGame(Widget):
+	score = NumericProperty(0)
+	points = NumericProperty(0)
+
 	bullet1 = AttackBullet()
 	bullet2 = AttackBullet()
 	bullet3 = AttackBullet()
@@ -48,19 +49,13 @@ class AttackGame(Widget):
 	square4 = AttackSquare()
 
 	def update(self, dt): # update the game
-		global score
-		global points
 		global squareSpeedMultiplier
 
 		# update score and square speed
-		score+=1
-		if (score==1000):
+		self.score+=1
+		if (self.score==1000):
 			squareSpeedMultiplier+=0.5
-		elif (score==2000):
-			squareSpeedMultiplier+=0.5
-		elif (score==4000):
-			squareSpeedMultiplier+=0.5
-		elif (score==6000):
+		elif (self.score%2000==0): # increase by 0.5 every 2000 points
 			squareSpeedMultiplier+=0.5
 
 		# if any bullet reaches the end of the screen, reset all bullets
@@ -70,32 +65,33 @@ class AttackGame(Widget):
 			self.bullet3.reset(self.circle1)
 			self.bullet4.reset(self.circle1)
 
-		#if any squares reach circle, end game
-		#if(self.circle1.collide_widget(self.square1))
-
 		# if a bullet hits a square, respawn the square
 		if (self.bullet1.collide_widget(self.square1)):
 			self.square1.respawn()
 			self.bullet1.reset(self.circle1)
-			points+=1
+			self.points+=1
 		if (self.bullet2.collide_widget(self.square2)):
 			self.square2.respawn()
 			self.bullet2.reset(self.circle1)
-			points+=1
+			self.points+=1
 		if (self.bullet3.collide_widget(self.square3)):
 			self.square3.respawn()
 			self.bullet3.reset(self.circle1)
-			points+=1
+			self.points+=1
 		if (self.bullet4.collide_widget(self.square4)):
 			self.square4.respawn()
 			self.bullet4.reset(self.circle1)
-			points+=1
+			self.points+=1
 
 		# constantly move squares
 		self.square1.move()
 		self.square2.move()
 		self.square3.move()
 		self.square4.move()
+
+		#if any squares reach circle, end game
+		if(self.circle1.collide_widget(self.square1)|self.circle2.collide_widget(self.square2)|self.circle3.collide_widget(self.square3)|self.circle4.collide_widget(self.square4)):
+			pass # change to end game screen
 
 	def on_touch_move(self, touch): # move bullet when circle is touched
 		if (self.circle1.isTouched(touch)==True): # move only bullet 1
