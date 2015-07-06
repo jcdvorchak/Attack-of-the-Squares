@@ -7,6 +7,7 @@
 
 
 import random
+import objects
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -14,58 +15,42 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import NumericProperty
 
-squareSpawn = Window.width+50
 squareSpeedMultiplier = 1
-
-class AttackCircle(Widget):
-	def isTouched(self, touch): # return true if touch is within its boundaries
-		isTouch = False
-		if ((touch.x < self.center_x+(self.width/2)) & (touch.x > self.center_x-(self.width/2)) & (touch.y < self.center_y+(self.width/2)) & (touch.y > self.center_y-(self.width/2))):
-			isTouch=True
-		return isTouch
-
-class AttackSquare(Widget):
-	def move(self):
-		self.center_x-=2*squareSpeedMultiplier
-
-	def respawn(self):
-		global squareSpawn
-		self.center_x=(squareSpawn+random.randint(0,100))
-
-class AttackBullet(Widget):
-	def move(self): # adds to the position of the bullet, moving it left
-		self.center_x+=5
-
-	def reset(self, circle): # resets the bullet to its origin within the circle
-		self.center_x=circle.center_x
 
 class AttackGame(Widget):
 	score = NumericProperty(0)
 	points = NumericProperty(0)
 
-	bullet1 = AttackBullet()
-	bullet2 = AttackBullet()
-	bullet3 = AttackBullet()
-	bullet4 = AttackBullet()
-	circle1 = AttackCircle()
-	circle2 = AttackCircle()
-	circle3 = AttackCircle()
-	circle4 = AttackCircle()
-	square1 = AttackSquare()
-	square2 = AttackSquare()
-	square3 = AttackSquare()
-	square4 = AttackSquare()
+	bullet1 = objects.AttackBullet()
+	bullet2 = objects.AttackBullet()
+	bullet3 = objects.AttackBullet()
+	bullet4 = objects.AttackBullet()
+	circle1 = objects.AttackCircle()
+	circle2 = objects.AttackCircle()
+	circle3 = objects.AttackCircle()
+	circle4 = objects.AttackCircle()
+	square1 = objects.AttackSquare()
+	square2 = objects.AttackSquare()
+	square3 = objects.AttackSquare()
+	square4 = objects.AttackSquare()
 
 	def update(self, dt): # update the game
 		global squareSpeedMultiplier
-
 
 		# update score and square speed
 		self.score+=1
 		if (self.score==1000):
 			squareSpeedMultiplier+=0.5
+			self.square1.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square2.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square3.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square4.setSpeedMultiplier(squareSpeedMultiplier)
 		elif (self.score%2000==0): # increase by 0.5 every 2000 points
 			squareSpeedMultiplier+=0.5
+			self.square1.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square2.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square3.setSpeedMultiplier(squareSpeedMultiplier)
+			self.square4.setSpeedMultiplier(squareSpeedMultiplier)
 
 		# if any bullet reaches the end of the screen, reset all bullets
 		if ((self.bullet1.center_x>Window.width) | (self.bullet2.center_x>Window.width) | (self.bullet3.center_x>Window.width) | (self.bullet4.center_x>Window.width)):
@@ -102,7 +87,7 @@ class AttackGame(Widget):
 		if(self.circle1.collide_widget(self.square1)|self.circle2.collide_widget(self.square2)|self.circle3.collide_widget(self.square3)|self.circle4.collide_widget(self.square4)):
 			pass # change to end game screen
 
-	def on_touch_down(self):
+	def on_touch_down(self, touch):
 		touch_down = True;
 
 	#def on_touch_down(self, touch): # move bullet when circle is touched
@@ -117,7 +102,7 @@ class AttackGame(Widget):
 				self.bullet2.move()
 				self.bullet1.reset(self.circle1)
 				self.bullet3.reset(self.circle1)
-				self.bullet4.reset(self.circle1) 
+				self.bullet4.reset(self.circle1)
 			elif (self.circle3.isTouched(touch)==True): # move only bullet 3
 				self.bullet3.move()
 				self.bullet1.reset(self.circle1)
