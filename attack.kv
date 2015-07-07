@@ -47,6 +47,7 @@
 			pos: self.pos
 			size: self.size
 
+	# score
 	Label:
 		font_size: root.height / 17
 		color: 1,1,0,1
@@ -58,6 +59,7 @@
 		x: 0
 		y: root.height-self.font_size
 		
+	# points
 	Label:
 		font_size: root.height / 17
 		color: 1,1,0,1
@@ -87,73 +89,66 @@
 		size: (root.width, self.font_size)
 		center_x: root.width/2
 
-		
+	# circles
 	AttackCircle:
 		id: circle1
 		size: (root.height/6, root.height/6)
 		center_y: (root.height/6)
 		center_x: self.width
-
 	AttackCircle:
 		id: circle2
 		size: (root.height/6, root.height/6)
 		center_y: (root.height/6)*2.25
 		center_x: self.width
-
 	AttackCircle:
 		id: circle3
 		size: (root.height/6, root.height/6)
 		center_y: (root.height/6)*3.5
 		center_x: self.width
-
 	AttackCircle:
 		id: circle4
 		size: (root.height/6, root.height/6)
 		center_y: (root.height/6)*4.75
 		center_x: self.width
 
+	# squares
 	AttackSquare:
 		id: square1
 		size: (root.height/8, root.height/8)
 		center_y: (root.height/6)
 		center_x: root.width-self.width
-
 	AttackSquare:
 		id: square2
 		size: (root.height/8, root.height/8)
 		center_y: (root.height/6)*2.25
 		center_x: root.width-self.width
-
 	AttackSquare:
 		id: square3
 		size: (root.height/8, root.height/8)
 		center_y: (root.height/6)*3.5
 		center_x: root.width-self.width
-
 	AttackSquare:
 		id: square4
 		size: (root.height/8, root.height/8)
 		center_y: (root.height/6)*4.75
 		center_x: root.width-self.width
 
+	# bullets
 	AttackBullet:
 		id: bullet1
 		size: (root.height/32, root.height/48)
 		center_y: (root.height/6)
 		center_x: root.height/6
-
 	AttackBullet:
 		id: bullet2
 		size: (root.height/32, root.height/48)
 		center_y: (root.height/6)*2.25
 		center_x: root.height/6
-
 	AttackBullet:
 		id: bullet3
 		size: (root.height/32, root.height/48)
 		center_y: (root.height/6)*3.5
 		center_x: root.height/6
-
 	AttackBullet:
 		id: bullet4
 		size: (root.height/32, root.height/48)
