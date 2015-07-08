@@ -5,6 +5,10 @@
 #   - repetative code = function
 #   - move objects to separate file, game in another
 
+# THIS PUSH IS TO CREATE AND IMPLEMENT LIST OBJECTS
+# square speed not twerking
+# bullet collision not twerking
+# bullet end of screen probs not working
 
 # import random
 import objects
@@ -15,57 +19,39 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import NumericProperty
 
-squareSpeedMultiplier = 1
+squareSpeedMultiplier = 1  # TODO can I move this to AttackSquareList
 
 
 class AttackGame(Widget):
     score = NumericProperty(0)
     points = NumericProperty(0)
 
-    bullet1 = objects.AttackBullet()
-    bullet2 = objects.AttackBullet()
-    bullet3 = objects.AttackBullet()
-    bullet4 = objects.AttackBullet()
-
-    circle1 = objects.AttackCircle()
-    circle2 = objects.AttackCircle()
-    circle3 = objects.AttackCircle()
-    circle4 = objects.AttackCircle()
-
-    square1 = objects.AttackSquare()
-    square2 = objects.AttackSquare()
-    square3 = objects.AttackSquare()
-    square4 = objects.AttackSquare()
+    circles = objects.AttackCircleList()
+    squares = objects.AttackSquareList()
+    bullets = objects.AttackBulletList()
 
     def update(self, dt):  # update the game
         global squareSpeedMultiplier
 
-        # update score and square speed
+        # update score by 1 on every update
         self.score += 1
-        if (self.score == 1000):
-            squareSpeedMultiplier += 0.5
-            self.square1.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square2.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square3.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square4.setSpeedMultiplier(squareSpeedMultiplier)
-        elif ((self.score % 2000) == 0):  # increase by 0.5 every 2000 points
-            squareSpeedMultiplier += 0.5
-            self.square1.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square2.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square3.setSpeedMultiplier(squareSpeedMultiplier)
-            self.square4.setSpeedMultiplier(squareSpeedMultiplier)
+
+        # update speed at score 1000, 2000, and every 2000 after that
+        if (self.score == 400 | self.score % 2000 == 0):
+            squareSpeedMultiplier += 2.0
+            self.squares = self.squares.setAllSpeedMultiplier(squareSpeedMultiplier)
 
         # if any bullet reaches the end of the screen, reset all bullets
-        if ((self.bullet1.center_x > Window.width) |
-                (self.bullet2.center_x > Window.width) |
-                (self.bullet3.center_x > Window.width) |
-                (self.bullet4.center_x > Window.width)):
-            self.bullet1.reset(self.circle1)
-            self.bullet2.reset(self.circle1)
-            self.bullet3.reset(self.circle1)
-            self.bullet4.reset(self.circle1)
+        self.bullets.checkPosition(Window.width, self.circles[0])
 
-        # if a bullet hits a square, respawn the square
+        # if a bullet hits a square, respawn the square and return points to add
+        # self.points += self.bullets.checkForCollision(self.squares, self.circles[0], self.points)
+        # for i in range(0, 4):
+        #     if (self.bullets[i].collide_widget(self.squares[i])):
+        #         self.squares[i].respawn()
+        #         self.bullets[i].reset(self.circles[0])
+        #         self.points += 1
+
         if (self.bullet1.collide_widget(self.square1)):
             self.square1.respawn()
             self.bullet1.reset(self.circle1)
@@ -84,16 +70,16 @@ class AttackGame(Widget):
             self.points += 1
 
         # constantly move squares
+        # self.squares.moveAll()
+
         self.square1.move()
         self.square2.move()
         self.square3.move()
         self.square4.move()
 
         #if any squares reach circle, end game
-        if(self.circle1.collide_widget(self.square1) |
-                self.circle2.collide_widget(self.square2) |
-                self.circle3.collide_widget(self.square3) |
-                self.circle4.collide_widget(self.square4)):
+        if(self.circle1.collide_widget(self.square1) | self.circle2.collide_widget(self.square2) |
+                self.circle3.collide_widget(self.square3) | self.circle4.collide_widget(self.square4)):
             pass  # change to end game screen
 
     def on_touch_down(self, touch):
@@ -158,8 +144,9 @@ class AttackApp(App):
         # sm.add_widget(GameScreen(name='game'))
 
         game = AttackGame()
-        Clock.schedule_interval(game.update, 1.0 / 30.0)  # update every 1/60s
+        Clock.schedule_interval(game.update, 1.0 / 60.0)  # update every 1/60s
         return game
+
 
 if __name__ == '__main__':
     AttackApp().run()
