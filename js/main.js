@@ -1,32 +1,17 @@
 /**
- * Attack of the squareGroup
+ * Attack of the Squares
  * Joey Dvorchak
  */
 
-/**
- * TODO
-   - auto sizing / ratio
-    - window.screen.width/height
- *
- */
-
-// scaling a sprite also scalse the x and y :(
-// boundaries are still the same ^^ for collision
 
 var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update });
 
+// load any assets
 function preload() {
-
-    game.load.image('background', 'assets/background.png');
-    // game.load.image('square', 'assets/square.png');
-    // game.load.image('circle', 'assets/circle.png');
-    // game.load.image('bullet', 'assets/bullet.png');
-
 
 }
 
 var scaleRatio = window.devicePixelRatio;
-// game.world._container.scale.set(scaleRatio,scaleRatio)
 
 var squareGroup;
 var circleGroup;
@@ -46,6 +31,7 @@ var bulletSpeed = 200;
 var squareSpeed = -200;
 var squarePixelDelay = 50;
 
+// prep everything, one time run
 function create() {
     width = game.world.width/scaleRatio;
     height = game.world.height/scaleRatio;
@@ -98,36 +84,33 @@ function create() {
     bmd.ctx.rect(0, 0, shapeWidth*(3/4), shapeWidth/3);
     bmd.ctx.fillStyle = '#FFFF00';
     bmd.ctx.fill();
-    drawnObject = game.add.sprite(width/14+(shapeWidth*(3/4)), xRatio, bmd);
+    drawnObject = game.add.sprite(-100, xRatio, bmd); // start offscreen
     bulletGroup.add(drawnObject);
     drawnObject.anchor.setTo(0.5);
-    drawnObject.body.velocity.x = bulletSpeed;
     drawnObject.collideWorldBounds=true;
 
     bullet = drawnObject;
 
-    //  The score
     scoreText = game.add.text(16, 16, 'score: '+score, { fontSize: '32px', fill: '#900' });
-
-    //  Our controls.
-    // cursors = game.input.keyboard.createCursorKeys();
 }
 
+// game updates every .. frame?
 function update() {
     game.physics.arcade.collide(squareGroup, bulletGroup, bulletSquareCollision, null, this);
     game.physics.arcade.collide(squareGroup, circleGroup, circleSquareCollision, null, this);
 }
 
-
+// called on mouse over of a circle
 function circleOver(circle, bullet) {
     resetBullet(circle.y);
 }
 
+// called on mouse out of a circle
 function circleOut() {
-    // stopBullet();
+    stopBullet();
 }
 
-
+// called when bullets and squares collide
 function bulletSquareCollision(square, bullet) {
     score++;
     updateScore();
@@ -136,6 +119,7 @@ function bulletSquareCollision(square, bullet) {
     resetSquare(square);
 }
 
+// called when circles and squares collide
 function circleSquareCollision(square, circle) {
     score-=5;
     updateScore();
@@ -143,7 +127,9 @@ function circleSquareCollision(square, circle) {
     resetSquare(square);
 }
 
-
+// reset to the bullet in front of the circle
+// circle is determined with the height parameter
+// if height is not passed the bullet stays in the same row
 function resetBullet(height) {
     bullet.x = (width/14)+(shapeWidth*3/4);
     bullet.body.velocity.x = bulletSpeed;
@@ -153,13 +139,15 @@ function resetBullet(height) {
     }
 }
 
+// move the bullet offscreen to simulate it dissapearing
 function stopBullet() {
-    resetBullet();
+    bullet.x = -100;
     bullet.body.velocity.x = 0;
 }
 
+// reset the square to a (mostly) random point beyond the left margin
 function resetSquare(square) {
-    square.x = width+(getRandomInt(0,4)*squarePixelDelay);
+    square.x = width+(getRandomInt(0,10)*squarePixelDelay);
     square.body.velocity.x = squareSpeed;
 }
 
@@ -170,6 +158,7 @@ function updateScore() {
     scoreText.text = 'score: ' + score;
 }
 
+// returns a random integer between min and max
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
